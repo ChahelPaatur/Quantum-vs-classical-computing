@@ -110,3 +110,62 @@ If you use this code in your research, please cite:
   url = {https://github.com/example/quantum-vs-classical-computing},
 }
 ```
+
+## Running Benchmarks
+
+This project includes several benchmark and visualization options to compare classical, quantum, and hybrid computing approaches:
+
+### Unified Benchmark Runner
+
+The easiest way to run benchmarks is with the unified benchmark runner:
+
+```bash
+python run_all_benchmarks.py
+```
+
+This will run the comprehensive "ultimate" benchmark by default. For more options:
+
+```bash
+# List all available benchmarks
+python run_all_benchmarks.py --list
+
+# Run a specific benchmark
+python run_all_benchmarks.py enhanced
+
+# Run all benchmarks in sequence
+python run_all_benchmarks.py all
+```
+
+### Available Benchmark Options
+
+1. **Ultimate Benchmark** - The most comprehensive option with a complete interactive dashboard
+   ```bash
+   python ultimate_benchmark_test.py
+   ```
+
+2. **Enhanced Visualizations** - Improved visualizations with mock data
+   ```bash
+   python enhanced_visualization_test.py
+   ```
+
+3. **Specific Visualizations** - Focused on time, resources, and practicality metrics
+   ```bash
+   python specific_visualization_test.py
+   ```
+
+4. **Standard Visualization** - Basic visualization viewer
+   ```bash
+   python view_visualizations.py
+   ```
+
+## Visualization Outputs
+
+The benchmarks produce various visualization outputs:
+
+- **Accuracy Comparison** - Compare prediction accuracy across models
+- **Time Comparison** - Training and inference time for each model
+- **Resource Usage** - Memory and CPU requirements
+- **Practicality Metrics** - Setup difficulty, interpretability, deployment complexity, etc.
+- **Multi-Dimensional Comparison** - Radar chart showing performance across multiple metrics
+
+The visualizations are saved in model-specific directories and can be viewed through HTML dashboards.

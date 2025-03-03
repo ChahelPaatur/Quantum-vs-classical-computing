@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum vs Classical Computing Benchmark Results</title>
+    <style>
+        /* Apple-inspired styling */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f7;
+        }
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: #1d1d1f;
+            text-align: center;
+        }
+        h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            color: #1d1d1f;
+        }
+        p {
+            font-size: 1.1rem;
+            color: #515154;
+            margin-bottom: 1.5rem;
+        }
+        .visualization-container {
+            background-color: white;
+            border-radius: 18px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            padding: 2rem;
+            margin-bottom: 2.5rem;
+            transition: transform 0.3s ease;
+        }
+        .visualization-container:hover {
+            transform: translateY(-5px);
+        }
+        .visualization-img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .section-header span {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background-color: #0071e3;
+            color: white;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+        footer {
+            text-align: center;
+            margin-top: 3rem;
+            color: #86868b;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Quantum vs Classical Computing Benchmark</h1>
+        <p>Visualizing performance comparisons between classical, quantum, and hybrid computing approaches</p>
+    </header>
+
+    <div class="visualization-container">
+        <div class="section-header">
+            <span>1</span>
+            <h2>Model Accuracy Comparison</h2>
+        </div>
+        <p>This visualization compares how accurately each computing paradigm predicts outcomes. Higher percentages indicate better performance.</p>
+        <img src="visualization_results/accuracy_comparison.png" alt="Model Accuracy Comparison" class="visualization-img">
+    </div>
+
+    <div class="visualization-container">
+        <div class="section-header">
+            <span>2</span>
+            <h2>Training & Inference Time</h2>
+        </div>
+        <p>This visualization shows how long each model takes to train and make predictions. Lower times indicate better performance.</p>
+        <img src="visualization_results/time_comparison.png" alt="Time Comparison" class="visualization-img">
+    </div>
+
+    <div class="visualization-container">
+        <div class="section-header">
+            <span>3</span>
+            <h2>Resource Usage</h2>
+        </div>
+        <p>This visualization displays how much memory and CPU each model requires. Lower resource needs indicate better efficiency.</p>
+        <img src="visualization_results/resource_usage.png" alt="Resource Usage" class="visualization-img">
+    </div>
+
+    <div class="visualization-container">
+        <div class="section-header">
+            <span>4</span>
+            <h2>Practicality Metrics</h2>
+        </div>
+        <p>This visualization compares real-world implementation factors like setup difficulty, interpretability, and scalability.</p>
+        <img src="visualization_results/practicality_comparison.png" alt="Practicality Comparison" class="visualization-img">
+    </div>
+
+    <div class="visualization-container">
+        <div class="section-header">
+            <span>5</span>
+            <h2>Multi-Dimensional Comparison</h2>
+        </div>
+        <p>This radar chart provides a holistic view of performance across multiple dimensions simultaneously.</p>
+        <img src="visualization_results/radar_comparison.png" alt="Radar Comparison" class="visualization-img">
+    </div>
+
+    <footer>
+        <p>Quantum vs Classical Computing Benchmark Project &copy; 2023</p>
+    </footer>
+</body>
+</html> 
