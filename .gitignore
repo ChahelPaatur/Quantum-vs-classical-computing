@@ -1,0 +1,55 @@
+# Python cache files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Data files (except examples)
+data/
+!data/examples/
+
+# Results (except READMEs)
+results/*
+!results/README.md
+demo_results/*
+!demo_results/README.md
+
+# Kaggle credentials
+kaggle.json
+
+# macOS files
+.DS_Store
+
+# IDE files
+.idea/
+.vscode/
+*.swp
+*.swo 

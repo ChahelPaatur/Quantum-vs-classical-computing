@@ -9,4 +9,5 @@ qiskit-machine-learning==0.6.1
 pennylane==0.30.0
 kaggle==1.5.16
 torch==2.0.1
-tqdm==4.65.0 
+tqdm==4.65.0
+psutil==5.9.5 
