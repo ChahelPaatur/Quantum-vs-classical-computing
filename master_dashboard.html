@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum vs Classical Computing Dashboard</title>
+    <style>
+        /* Apple-inspired UI design */
+        :root {
+            --apple-blue: #0071e3;
+            --apple-light-blue: #69a6f8;
+            --apple-dark: #1d1d1f;
+            --apple-gray: #f5f5f7;
+            --apple-light-gray: #e8e8ed;
+            --classical-color: #5470c6;
+            --quantum-color: #91cc75;
+            --hybrid-color: #fac858;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            line-height: 1.6;
+            color: var(--apple-dark);
+            background-color: var(--apple-gray);
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 0;
+            background: linear-gradient(to right, var(--classical-color), var(--hybrid-color));
+            color: white;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+            letter-spacing: -0.5px;
+        }
+        
+        p.subtitle {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            border-radius: 15px;
+            background-color: white;
+            padding: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 20px;
+            z-index: 100;
+        }
+        
+        .tab-button {
+            background: none;
+            border: none;
+            padding: 12px 24px;
+            margin: 0 4px;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: #777;
+        }
+        
+        .tab-button:hover {
+            background-color: var(--apple-light-gray);
+            color: var(--apple-dark);
+        }
+        
+        .tab-button.active {
+            background-color: var(--apple-blue);
+            color: white;
+        }
+        
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+        }
+        
+        .card-header {
+            padding: 20px 25px;
+            border-bottom: 1px solid var(--apple-light-gray);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .card-header h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--apple-dark);
+        }
+        
+        .card-body {
+            padding: 25px;
+        }
+        
+        .card-description {
+            margin-bottom: 20px;
+            color: #666;
+            font-size: 1.1rem;
+        }
+        
+        .visualization {
+            width: 100%;
+            border-radius: 8px;
+            height: auto;
+        }
+        
+        .grid-2col {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+        }
+        
+        .grid-3col {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+        
+        .paradigm-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .paradigm-card {
+            background-color: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            padding: 25px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .paradigm-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .paradigm-card p {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            color: #666;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .metric {
+            text-align: center;
+            background-color: var(--apple-light-gray);
+            padding: 15px;
+            border-radius: 12px;
+        }
+        
+        .metric-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .metric-label {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .classical-card {
+            border-left: 5px solid var(--classical-color);
+        }
+        
+        .classical-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(84, 112, 198, 0.1), transparent 50%);
+            z-index: 0;
+        }
+        
+        .quantum-card {
+            border-left: 5px solid var(--quantum-color);
+        }
+        
+        .quantum-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(145, 204, 117, 0.1), transparent 50%);
+            z-index: 0;
+        }
+        
+        .hybrid-card {
+            border-left: 5px solid var(--hybrid-color);
+        }
+        
+        .hybrid-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(250, 200, 88, 0.1), transparent 50%);
+            z-index: 0;
+        }
+        
+        .conclusion {
+            background-color: white;
+            border-radius: 16px;
+            padding: 30px;
+            margin: 40px 0;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+        }
+        
+        .conclusion h2 {
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+        
+        .conclusion p {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+        
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 40px 0;
+        }
+        
+        .action-button {
+            display: inline-block;
+            background-color: var(--apple-blue);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(0, 113, 227, 0.3);
+        }
+        
+        .action-button:hover {
+            background-color: #0062c3;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(0, 113, 227, 0.4);
+        }
+        
+        .action-button.secondary {
+            background-color: white;
+            color: var(--apple-blue);
+            border: 2px solid var(--apple-blue);
+            box-shadow: none;
+        }
+        
+        .action-button.secondary:hover {
+            background-color: var(--apple-light-gray);
+            color: var(--apple-blue);
+            box-shadow: none;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            padding: 30px 0;
+            color: #777;
+            border-top: 1px solid var(--apple-light-gray);
+        }
+        
+        @media (max-width: 1000px) {
+            .grid-2col, .grid-3col {
+                grid-template-columns: 1fr;
+            }
+            
+            .tabs {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Quantum vs Classical Computing</h1>
+            <p class="subtitle">A comprehensive comparison of classical, quantum, and hybrid computing approaches for machine learning tasks</p>
+        </header>
+        
+        <div class="tabs">
+            <button class="tab-button active" data-tab="dashboard">Dashboard</button>
+            <button class="tab-button" data-tab="comparison">Model Comparison</button>
+            <button class="tab-button" data-tab="visualizations">All Visualizations</button>
+            <button class="tab-button" data-tab="insights">Insights</button>
+        </div>
+        
+        <!-- Dashboard Tab -->
+        <div id="dashboard" class="tab-content active">
+            <div class="grid-2col">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Model Accuracy Comparison</h2>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-description">How well do different computing paradigms perform on prediction tasks?</p>
+                        <img src="ultimate_benchmark_results/accuracy_comparison.png" alt="Accuracy Comparison" class="visualization">
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Training & Inference Time</h2>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-description">How fast are different models at training and making predictions?</p>
+                        <img src="ultimate_benchmark_results/time_comparison.png" alt="Time Comparison" class="visualization">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h2>Computing Paradigms Overview</h2>
+                </div>
+                <div class="card-body">
+                    <p class="card-description">A comparison of the three main computing approaches and their characteristics.</p>
+                    
+                    <div class="paradigm-grid">
+                        <div class="paradigm-card classical-card">
+                            <h3>Classical Computing</h3>
+                            <p>Traditional algorithms running on conventional hardware.</p>
+                            <div class="metrics-grid">
+                                <div class="metric">
+                                    <div class="metric-value">85-92%</div>
+                                    <div class="metric-label">Accuracy</div>
+                                </div>
+                                <div class="metric">
+                                    <div class="metric-value">0.5-2.0s</div>
+                                    <div class="metric-label">Training Time</div>
+                                </div>
+                                <div class="metric">
+                                    <div class="metric-value">~7.5/10</div>
+                                    <div class="metric-label">Practicality</div>
+                                </div>
+                                <div class="metric">
+                                    <div class="metric-value">Low</div>
+                                    <div class="metric-label">Resource Usage</div>
+                                </div>
+                            </div>
+                            <p>Good balance of accuracy and performance with accessible hardware requirements.</p>
+                        </div>
+                        
+                        <div class="paradigm-card quantum-card">
+                            <h3>Quantum Computing</h3>
+                            <p>Algorithms that leverage quantum mechanical principles.</p>
+                            <div class="metrics-grid">
+                                <div class="metric">
+                                    <div class="metric-value">75-88%</div>
+                                    <div class="metric-label">Accuracy</div>
+                                </div>
+                                <div class="metric">
+                                    <div class="metric-value">3.0-6.0s</div>
+                                    <div class="metric-label">Training Time</div>
+                                </div>
+                                <div class="metric">
+                                    <div class="metric-value">~5.0/10</div>
+                                    <div class="metric-label">Practicality</div>
+                                </div>
+                                <div class="metric">
+                                    <div class="metric-value">High</div>
+                                    <div class="metric-label">Resource Usage</div>
+                                </div>
+                            </div>
+                            <p>Promising approach but currently faces challenges with hardware access and complexity.</p>
+                        </div>
+                        
+                        <div class="paradigm-card hybrid-card">
+                            <h3>Hybrid Computing</h3>
+                            <p>Combines classical and quantum approaches for best results.</p>
+                            <div class="metrics-grid">
+                                <div class="metric">
+                                    <div class="metric-value">88-94%</div>
+                                    <div class="metric-label">Accuracy</div>
+                                </div>
+                                <div class="metric">
+                                    <div class="metric-value">2.0-4.0s</div>
+                                    <div class="metric-label">Training Time</div>
+                                </div>
+                                <div class="metric">
+                                    <div class="metric-value">~6.5/10</div>
+                                    <div class="metric-label">Practicality</div>
+                                </div>
+                                <div class="metric">
+                                    <div class="metric-value">Medium</div>
+                                    <div class="metric-label">Resource Usage</div>
+                                </div>
+                            </div>
+                            <p>Often achieves the best accuracy by leveraging strengths of both approaches.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="grid-2col">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Resource Usage</h2>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-description">How much memory and CPU do different models require?</p>
+                        <img src="ultimate_benchmark_results/resource_usage.png" alt="Resource Usage" class="visualization">
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Multi-Dimensional Analysis</h2>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-description">A radar chart showing performance across multiple dimensions simultaneously.</p>
+                        <img src="ultimate_benchmark_results/radar_comparison.png" alt="Radar Comparison" class="visualization">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="action-buttons">
+                <a href="run_all_benchmarks.py" class="action-button">Run Benchmark Tests</a>
+                <a href="#insights" class="action-button secondary" onclick="activateTab('insights')">View Key Insights</a>
+            </div>
+        </div>
+        
+        <!-- Model Comparison Tab -->
+        <div id="comparison" class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Model Comparison</h2>
+                </div>
+                <div class="card-body">
+                    <p class="card-description">A detailed comparison of all models across key performance metrics.</p>
+                    <img src="ultimate_benchmark_results/practicality_comparison.png" alt="Practicality Comparison" class="visualization">
+                </div>
+            </div>
+            
+            <div class="grid-3col">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Classical Models</h2>
+                    </div>
+                    <div class="card-body">
+                        <ul>
+                            <li><strong>Random Forest</strong>: Fast training, good accuracy, easy to interpret</li>
+                            <li><strong>Gradient Boosting</strong>: Higher accuracy, slower training than Random Forest</li>
+                            <li><strong>Neural Network</strong>: Versatile but requires more data and tuning</li>
+                            <li><strong>Deep Learning</strong>: Highest potential accuracy but most resource intensive</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Quantum Models</h2>
+                    </div>
+                    <div class="card-body">
+                        <ul>
+                            <li><strong>Variational Classifier</strong>: Quantum circuit with trainable parameters</li>
+                            <li><strong>Quantum Kernel</strong>: Uses quantum feature maps for classification</li>
+                            <li><strong>Quantum Neural Net</strong>: Quantum equivalent of neural networks</li>
+                            <li><strong>Quantum Circuit</strong>: Custom quantum circuits for specific problems</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Hybrid Models</h2>
+                    </div>
+                    <div class="card-body">
+                        <ul>
+                            <li><strong>Feature Hybrid</strong>: Split features between quantum and classical processing</li>
+                            <li><strong>Ensemble Hybrid</strong>: Combine predictions from quantum and classical models</li>
+                            <li><strong>Quantum Enhanced</strong>: Use quantum computing to enhance classical models</li>
+                            <li><strong>Quantum-Classical</strong>: Quantum feature extraction with classical processing</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- All Visualizations Tab -->
+        <div id="visualizations" class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Accuracy Comparison</h2>
+                </div>
+                <div class="card-body">
+                    <p class="card-description">How well do different computing paradigms perform on prediction tasks?</p>
+                    <img src="ultimate_benchmark_results/accuracy_comparison.png" alt="Accuracy Comparison" class="visualization">
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h2>Training & Inference Time</h2>
+                </div>
+                <div class="card-body">
+                    <p class="card-description">How fast are different models at training and making predictions?</p>
+                    <img src="ultimate_benchmark_results/time_comparison.png" alt="Time Comparison" class="visualization">
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h2>Resource Usage</h2>
+                </div>
+                <div class="card-body">
+                    <p class="card-description">How much memory and CPU do different models require?</p>
+                    <img src="ultimate_benchmark_results/resource_usage.png" alt="Resource Usage" class="visualization">
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h2>Practicality Metrics</h2>
+                </div>
+                <div class="card-body">
+                    <p class="card-description">How practical are different models to implement, deploy, and scale?</p>
+                    <img src="ultimate_benchmark_results/practicality_comparison.png" alt="Practicality Comparison" class="visualization">
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h2>Multi-Dimensional Analysis</h2>
+                </div>
+                <div class="card-body">
+                    <p class="card-description">A radar chart showing performance across multiple dimensions simultaneously.</p>
+                    <img src="ultimate_benchmark_results/radar_comparison.png" alt="Radar Comparison" class="visualization">
+                </div>
+            </div>
+            
+            <div class="action-buttons">
+                <a href="run_all_benchmarks.py" class="action-button">Generate New Visualizations</a>
+            </div>
+        </div>
+        
+        <!-- Insights Tab -->
+        <div id="insights" class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Key Findings</h2>
+                </div>
+                <div class="card-body">
+                    <p class="card-description">The most important insights from our comprehensive benchmark.</p>
+                    
+                    <div class="conclusion">
+                        <h2>Summary of Results</h2>
+                        <p>Our benchmark reveals distinct trade-offs between classical, quantum, and hybrid computing approaches for machine learning tasks:</p>
+                        
+                        <ul>
+                            <li><strong>Classical Models</strong> provide a solid balance of accuracy, speed, and practicality. They're well-suited for most production environments today, with mature tooling and straightforward deployment paths.</li>
+                            <li><strong>Quantum Models</strong> demonstrate promising results but currently face practical limitations. Higher resource requirements and longer training times make them more suitable for specialized research applications rather than general production use.</li>
+                            <li><strong>Hybrid Models</strong> achieve the best accuracy by combining strengths from both paradigms. They represent a practical middle ground, offering improved accuracy over classical models without the full implementation complexity of pure quantum approaches.</li>
+                        </ul>
+                        
+                        <h2>Recommendations</h2>
+                        <p>Based on our findings, we recommend:</p>
+                        
+                        <ul>
+                            <li>For immediate production needs, classical models remain the most practical choice</li>
+                            <li>For research and exploration, quantum models offer unique capabilities worth investigating</li>
+                            <li>For cutting-edge applications seeking maximum accuracy, hybrid approaches offer the best overall balance</li>
+                        </ul>
+                        
+                        <p>As quantum hardware and frameworks continue to mature, we expect to see improved practicality metrics for quantum and hybrid approaches in the future.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h2>Future Prospects</h2>
+                </div>
+                <div class="card-body">
+                    <p class="card-description">How the landscape might evolve in the coming years.</p>
+                    
+                    <div class="conclusion">
+                        <h2>The Road Ahead</h2>
+                        <p>Several key developments are likely to influence the quantum vs classical computing landscape:</p>
+                        
+                        <ul>
+                            <li><strong>Quantum Hardware Advancements</strong>: As quantum computers become more powerful and stable, the performance gap with classical approaches will likely narrow</li>
+                            <li><strong>Specialized Algorithms</strong>: New algorithms specifically designed for quantum and hybrid approaches may unlock currently inaccessible performance benefits</li>
+                            <li><strong>Accessibility Improvements</strong>: Better development tools and cloud-based quantum computing resources will make these technologies more accessible</li>
+                            <li><strong>Problem-Specific Advantages</strong>: Certain problem domains (optimization, simulation, cryptography) may see quantum advantages emerge before others</li>
+                        </ul>
+                        
+                        <p>The most promising path forward appears to be through hybrid approaches that can leverage the best of both worlds while quantum technology continues to mature.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="action-buttons">
+                <a href="run_all_benchmarks.py" class="action-button">Run Benchmark Tests</a>
+            </div>
+        </div>
+        
+        <footer>
+            <p>Quantum vs Classical Computing Benchmark Project &copy; 2023</p>
+        </footer>
+    </div>
+    
+    <script>
+        // Tab functionality
+        function activateTab(tabId) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Remove active class from all tab buttons
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.classList.remove('active');
+            });
+            
+            // Activate the selected tab content
+            document.getElementById(tabId).classList.add('active');
+            
+            // Activate the corresponding tab button
+            document.querySelector(`.tab-button[data-tab="${tabId}"]`).classList.add('active');
+        }
+        
+        // Add click events to tab buttons
+        document.querySelectorAll('.tab-button').forEach(button => {
+            button.addEventListener('click', () => {
+                const tabId = button.getAttribute('data-tab');
+                activateTab(tabId);
+            });
+        });
+    </script>
+</body>
+</html> 

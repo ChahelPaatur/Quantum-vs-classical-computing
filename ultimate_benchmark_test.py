@@ -148,7 +148,27 @@ def create_benchmark_summary(results, output_dir):
             'hardware_requirements': np.mean([m[1]['hardware_requirements'] for m in models]),
             'scalability': np.mean([m[1]['scalability'] for m in models]),
         }
+        
+        # Calculate practicality score as the average of all practicality metrics
+        type_metrics['practicality_score'] = np.mean([
+            type_metrics['setup_difficulty'],
+            type_metrics['interpretability'],
+            type_metrics['deployment_complexity'],
+            type_metrics['hardware_requirements'],
+            type_metrics['scalability']
+        ])
+        
         averages[model_type] = type_metrics
+    
+    # Calculate practicality score for each model
+    for model, metrics in results.items():
+        metrics['practicality_score'] = np.mean([
+            metrics['setup_difficulty'],
+            metrics['interpretability'],
+            metrics['deployment_complexity'],
+            metrics['hardware_requirements'],
+            metrics['scalability']
+        ])
     
     # Find best model for each metric
     best_models = {
@@ -156,13 +176,7 @@ def create_benchmark_summary(results, output_dir):
         'training_time': min(results.items(), key=lambda x: x[1]['training_time']),
         'inference_time': min(results.items(), key=lambda x: x[1]['inference_time']),
         'memory_usage': min(results.items(), key=lambda x: x[1]['memory_usage']),
-        'practicality_score': max(results.items(), key=lambda x: sum([
-            x[1]['setup_difficulty'], 
-            x[1]['interpretability'],
-            x[1]['deployment_complexity'],
-            x[1]['hardware_requirements'],
-            x[1]['scalability']
-        ]))
+        'practicality_score': max(results.items(), key=lambda x: x[1]['practicality_score'])
     }
     
     # Generate insights
@@ -175,7 +189,7 @@ def create_benchmark_summary(results, output_dir):
     # Save summary as JSON
     summary = {
         'averages': averages,
-        'best_models': {k: {'model': v[0], 'value': v[1][k if k != 'practicality_score' else 'setup_difficulty']} for k, v in best_models.items()},
+        'best_models': {k: {'model': v[0], 'value': v[1][k]} for k, v in best_models.items()},
         'insights': insights,
         'timestamp': datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     }
@@ -218,9 +232,9 @@ def run_ultimate_benchmark():
             save_path=f"{OUTPUT_DIR}/accuracy_comparison.png"
         )),
         
-        # 2. Time comparison
-        ("time_comparison.png", "Time Efficiency", lambda: visualizer.plot_time_comparison(
-            all_results, save_path=f"{OUTPUT_DIR}/time_comparison.png"
+        # 2. Time comparison - Enhanced version
+        ("time_comparison.png", "Time Efficiency", lambda: plot_enhanced_time_comparison(
+            all_results, visualizer, save_path=f"{OUTPUT_DIR}/time_comparison.png"
         )),
         
         # 3. Resource usage
@@ -277,13 +291,7 @@ def run_ultimate_benchmark():
     best_training = min(all_results.items(), key=lambda x: x[1]['training_time'])
     best_inference = min(all_results.items(), key=lambda x: x[1]['inference_time'])
     best_memory = min(all_results.items(), key=lambda x: x[1]['memory_usage'])
-    best_practicality = max(all_results.items(), key=lambda x: sum([
-        x[1]['setup_difficulty'], 
-        x[1]['interpretability'],
-        x[1]['deployment_complexity'],
-        x[1]['hardware_requirements'],
-        x[1]['scalability']
-    ]) / 5)
+    best_practicality = max(all_results.items(), key=lambda x: x[1]['practicality_score'])
     
     # Prepare data for dashboard
     model_rows = ""
@@ -819,6 +827,175 @@ def run_ultimate_benchmark():
     
     print("\n✨ To view the dashboard at any time, open this file in your browser:")
     print(f"   {os.path.abspath(f'{OUTPUT_DIR}/benchmark_dashboard.html')}")
+
+def plot_enhanced_time_comparison(results_dict, visualizer, figsize=(14, 9), save_path=None):
+    """
+    Enhanced version of time comparison plot with improved design and clarity.
+    This creates a dual-axis chart showing training time and inference time separately.
+    """
+    plt.figure(figsize=figsize, dpi=300)
+    
+    # Group results by model type
+    classical_models = [(k, v) for k, v in results_dict.items() if v['model_type'] == 'Classical']
+    quantum_models = [(k, v) for k, v in results_dict.items() if v['model_type'] == 'Quantum']
+    hybrid_models = [(k, v) for k, v in results_dict.items() if v['model_type'] == 'Hybrid']
+    
+    # Sort models by training time within their groups
+    classical_models.sort(key=lambda x: x[1]['training_time'])
+    quantum_models.sort(key=lambda x: x[1]['training_time'])
+    hybrid_models.sort(key=lambda x: x[1]['training_time'])
+    
+    # Combine sorted groups
+    all_models = classical_models + quantum_models + hybrid_models
+    
+    # Prepare data
+    model_names = [model[0] for model in all_models]
+    training_times = [model[1]['training_time'] for model in all_models]
+    inference_times = [model[1]['inference_time'] * 1000 for model in all_models]  # Convert to ms
+    model_types = [model[1]['model_type'] for model in all_models]
+    
+    # Set up the figure with GridSpec for better control
+    fig = plt.figure(figsize=figsize, dpi=300)
+    gs = fig.add_gridspec(1, 1)
+    ax1 = fig.add_subplot(gs[0, 0])
+    ax2 = ax1.twinx()  # Create a second y-axis
+    
+    # Define colors with better Apple-style palette
+    colors = {
+        'Classical': '#5470c6',  # Blue
+        'Quantum': '#91cc75',    # Green
+        'Hybrid': '#fac858'      # Yellow/Gold
+    }
+    
+    bar_width = 0.35
+    x = np.arange(len(model_names))
+    
+    # Plot training time bars
+    training_bars = ax1.bar(
+        x - bar_width/2, 
+        training_times, 
+        width=bar_width, 
+        label='Training Time (seconds)', 
+        color=[colors[t] for t in model_types],
+        alpha=0.8,
+        edgecolor='white',
+        linewidth=1.5
+    )
+    
+    # Plot inference time bars with a different pattern
+    inference_bars = ax2.bar(
+        x + bar_width/2, 
+        inference_times, 
+        width=bar_width, 
+        label='Inference Time (milliseconds)', 
+        color=[colors[t] for t in model_types],
+        alpha=0.5,
+        hatch='///',
+        edgecolor='white',
+        linewidth=1.5
+    )
+    
+    # Add a white stroke to bars for Apple-style appearance
+    for bar in training_bars:
+        bar.set_edgecolor('white')
+        bar.set_linewidth(0.8)
+    
+    for bar in inference_bars:
+        bar.set_edgecolor('white')
+        bar.set_linewidth(0.8)
+    
+    # Set labels and title with improved typography
+    ax1.set_ylabel('Training Time (seconds)', fontsize=14, weight='bold', color='#333')
+    ax2.set_ylabel('Inference Time (milliseconds)', fontsize=14, weight='bold', color='#333')
+    plt.title('Training & Inference Time Comparison', fontsize=18, weight='bold', pad=20, color='#1d1d1f')
+    
+    # Set x-ticks and improve model name labels
+    ax1.set_xticks(x)
+    ax1.set_xticklabels(model_names, rotation=45, ha='right', fontsize=11)
+    
+    # Set grid for better readability (Apple-style subtle grid)
+    ax1.grid(axis='y', linestyle='-', alpha=0.1)
+    ax1.set_axisbelow(True)
+    
+    # Remove spines for cleaner look
+    ax1.spines['top'].set_visible(False)
+    ax1.spines['right'].set_visible(False)
+    ax2.spines['top'].set_visible(False)
+    
+    # Add dividing lines between model types
+    if classical_models and quantum_models:
+        div_pos = len(classical_models) - 0.5
+        ax1.axvline(x=div_pos, color='#e0e0e0', linestyle='-', linewidth=1.5, alpha=0.7)
+        plt.text(div_pos - 0.05, ax1.get_ylim()[1] * 1.03, 'Classical', fontsize=12, 
+                 ha='right', va='bottom', color=colors['Classical'], weight='bold')
+        plt.text(div_pos + 0.05, ax1.get_ylim()[1] * 1.03, 'Quantum', fontsize=12, 
+                 ha='left', va='bottom', color=colors['Quantum'], weight='bold')
+    
+    if quantum_models and hybrid_models:
+        div_pos = len(classical_models) + len(quantum_models) - 0.5
+        ax1.axvline(x=div_pos, color='#e0e0e0', linestyle='-', linewidth=1.5, alpha=0.7)
+        if classical_models:
+            plt.text(div_pos - 0.05, ax1.get_ylim()[1] * 1.03, 'Quantum', fontsize=12, 
+                     ha='right', va='bottom', color=colors['Quantum'], weight='bold')
+        plt.text(div_pos + 0.05, ax1.get_ylim()[1] * 1.03, 'Hybrid', fontsize=12, 
+                 ha='left', va='bottom', color=colors['Hybrid'], weight='bold')
+    
+    # Add a combined legend with custom positioning
+    lines_1, labels_1 = ax1.get_legend_handles_labels()
+    lines_2, labels_2 = ax2.get_legend_handles_labels()
+    
+    legend = ax1.legend(
+        lines_1 + lines_2, 
+        labels_1 + labels_2, 
+        loc='upper center', 
+        bbox_to_anchor=(0.5, -0.15),
+        ncol=2,
+        frameon=True,
+        fancybox=True,
+        shadow=False,
+        fontsize=12
+    )
+    legend.get_frame().set_linewidth(0.5)
+    
+    # Add insights annotations
+    min_training = min(training_times)
+    min_training_idx = training_times.index(min_training)
+    min_inference = min(inference_times)
+    min_inference_idx = inference_times.index(min_inference)
+    
+    # Add insight callouts if they're different models
+    if min_training_idx != min_inference_idx:
+        ax1.annotate(
+            f'Fastest Training:\n{model_names[min_training_idx]}',
+            xy=(min_training_idx, min_training),
+            xytext=(min_training_idx, min_training * 1.5),
+            arrowprops=dict(arrowstyle='->', color='#333', linewidth=1.5, connectionstyle="arc3,rad=.2"),
+            bbox=dict(boxstyle="round,pad=0.5", fc='white', ec='#ccc', alpha=0.9),
+            ha='center', va='center', fontsize=10, color='#333', weight='bold'
+        )
+        
+        ax2.annotate(
+            f'Fastest Inference:\n{model_names[min_inference_idx]}',
+            xy=(min_inference_idx, min_inference),
+            xytext=(min_inference_idx, min_inference * 1.5),
+            arrowprops=dict(arrowstyle='->', color='#333', linewidth=1.5, connectionstyle="arc3,rad=.2"),
+            bbox=dict(boxstyle="round,pad=0.5", fc='white', ec='#ccc', alpha=0.9),
+            ha='center', va='center', fontsize=10, color='#333', weight='bold'
+        )
+    
+    # Add watermark or note
+    plt.figtext(
+        0.99, 0.01, 'Quantum vs Classical Computing Benchmark', 
+        ha='right', va='bottom', color='#999', fontsize=8
+    )
+    
+    plt.tight_layout(rect=[0, 0.02, 1, 0.98])
+    
+    # Save the figure if a path is provided
+    if save_path:
+        plt.savefig(save_path, dpi=300, bbox_inches='tight')
+    
+    return plt.gcf()
 
 if __name__ == "__main__":
     run_ultimate_benchmark() 

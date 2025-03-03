@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum vs Classical Computing - Dashboard</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f7;
+        }
+        h1, h2, h3 {
+            color: #1d1d1f;
+        }
+        h1 {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        .card {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            padding: 2rem;
+            transition: transform 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        .card h2 {
+            margin-top: 0;
+            border-bottom: 2px solid #f5f5f7;
+            padding-bottom: 0.5rem;
+        }
+        .btn {
+            display: inline-block;
+            background-color: #0071e3;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            text-decoration: none;
+            margin-top: 1rem;
+            font-weight: bold;
+        }
+        .btn:hover {
+            background-color: #0077ed;
+        }
+        footer {
+            text-align: center;
+            margin-top: 3rem;
+            color: #86868b;
+            padding-top: 1rem;
+            border-top: 1px solid #d2d2d7;
+        }
+    </style>
+</head>
+<body>
+    <h1>Quantum vs Classical Computing</h1>
+    
+    <div class="container">
+
+        <div class="card">
+            <h2>Ultimate Benchmark</h2>
+            <p>View benchmark results and visualizations from the ultimate benchmark tests.</p>
+            <a href="ultimate_benchmark_results/benchmark_dashboard.html" class="btn">View Dashboard</a>
+        </div>
+        
+        <div class="card">
+            <h2>Run Benchmark</h2>
+            <p>Execute the benchmark tests to generate new visualizations and results.</p>
+            <a href="#" onclick="runBenchmark(); return false;" class="btn">Run Benchmark</a>
+        </div>
+    </div>
+    
+    <footer>
+        <p>Quantum vs Classical Computing Benchmark Project</p>
+    </footer>
+    
+    <script>
+        function runBenchmark() {
+            if (confirm("Do you want to run the benchmark test? This may take a few minutes.")) {
+                window.location.href = "run_all_benchmarks.py";
+            }
+        }
+    </script>
+</body>
+</html>
+    

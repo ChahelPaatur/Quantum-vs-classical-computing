@@ -415,10 +415,28 @@ class AppleStyleVisualizer:
         data = {metric: [] for metric in metrics}
         
         for model_name, model_metrics in results_dict.items():
+            # Support both nested and direct structure for practicality metrics
             if 'practicality' in model_metrics:
+                # Nested structure (practicality is a dictionary containing metrics)
                 models.append(model_name)
                 for metric in metrics:
                     data[metric].append(model_metrics['practicality'][metric])
+            elif all(metric in model_metrics for metric in metrics):
+                # Direct structure (metrics are direct keys in the model_metrics dict)
+                models.append(model_name)
+                for metric in metrics:
+                    data[metric].append(model_metrics[metric])
+        
+        # Only proceed if we have data to plot
+        if not models:
+            print("Warning: No practicality metrics found in the data. Skipping practicality comparison plot.")
+            empty_fig = plt.figure(figsize=(10, 6))
+            plt.text(0.5, 0.5, "No practicality metrics data available", 
+                    horizontalalignment='center', verticalalignment='center',
+                    fontsize=14)
+            if save_path:
+                plt.savefig(save_path, dpi=300, bbox_inches='tight')
+            return empty_fig
         
         # Set width of bars
         barWidth = 0.15
@@ -441,11 +459,11 @@ class AppleStyleVisualizer:
         # Add xticks on the middle of the group bars
         plt.xlabel('Models', fontsize=14, fontweight='bold')
         plt.ylabel('Score (Higher is Better)', fontsize=14, fontweight='bold')
-        plt.xticks([r + barWidth * 2 for r in range(len(models))], models)
+        plt.xticks([r + barWidth * 2 for r in range(len(models))], models, rotation=45, ha='right')
         
         # Create legend & title
         plt.title('Practicality Metrics Comparison', fontsize=20, fontweight='bold', pad=20)
-        plt.legend(loc='upper center', bbox_to_anchor=(0.5, -0.10), ncol=5)
+        plt.legend(loc='upper center', bbox_to_anchor=(0.5, -0.15), ncol=5)
         
         # Set y-axis limits
         plt.ylim(0, 10.5)

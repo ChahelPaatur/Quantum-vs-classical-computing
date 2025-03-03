@@ -1,62 +1,65 @@
 {
   "averages": {
     "Classical": {
-      "accuracy": 0.8850236346967817,
-      "training_time": 1.0319917235820144,
-      "inference_time": 0.03908427963609776,
-      "memory_usage": 5.761794306961173,
-      "cpu_usage": 15.31373833777786,
-      "setup_difficulty": 7.820333676780495,
-      "interpretability": 7.723766191464724,
-      "deployment_complexity": 7.269943956684567,
-      "hardware_requirements": 7.711961564050663,
-      "scalability": 7.592167965558686
+      "accuracy": 0.8623959483792328,
+      "training_time": 1.112436979075031,
+      "inference_time": 0.06085421132093931,
+      "memory_usage": 5.695748183802813,
+      "cpu_usage": 12.97593906887121,
+      "setup_difficulty": 7.4375850586806305,
+      "interpretability": 7.729522978711468,
+      "deployment_complexity": 7.645203548905709,
+      "hardware_requirements": 8.2852621458702,
+      "scalability": 7.631110078701024,
+      "practicality_score": 7.745736762173806
     },
     "Quantum": {
-      "accuracy": 0.8212000333575751,
-      "training_time": 4.418335569844261,
-      "inference_time": 0.1673927747578604,
-      "memory_usage": 20.367362103777744,
-      "cpu_usage": 53.25228353844926,
-      "setup_difficulty": 4.286176755356758,
-      "interpretability": 3.9917291643093042,
-      "deployment_complexity": 4.185175439275747,
-      "hardware_requirements": 4.4558486281881,
-      "scalability": 4.078866727607971
+      "accuracy": 0.7733420273890574,
+      "training_time": 4.918854246822827,
+      "inference_time": 0.20886733841733085,
+      "memory_usage": 21.121454682923886,
+      "cpu_usage": 48.88019447115668,
+      "setup_difficulty": 4.441316292321669,
+      "interpretability": 4.589319442509427,
+      "deployment_complexity": 4.763014350757745,
+      "hardware_requirements": 4.5511869626157235,
+      "scalability": 4.273227402490554,
+      "practicality_score": 4.523612890139024
     },
     "Hybrid": {
-      "accuracy": 0.8952213467380004,
-      "training_time": 2.9907877071185114,
-      "inference_time": 0.11434316020420363,
-      "memory_usage": 14.501636954389145,
-      "cpu_usage": 31.373626587857068,
-      "setup_difficulty": 5.353049785301764,
-      "interpretability": 6.030967496332583,
-      "deployment_complexity": 6.1604229664378005,
-      "hardware_requirements": 6.088130010710421,
-      "scalability": 5.4032400561003975
+      "accuracy": 0.8859475653967858,
+      "training_time": 3.377749759048103,
+      "inference_time": 0.11267589366107597,
+      "memory_usage": 12.652981792299595,
+      "cpu_usage": 34.0146849457958,
+      "setup_difficulty": 6.062770743328102,
+      "interpretability": 5.612102093818791,
+      "deployment_complexity": 6.111092943246103,
+      "hardware_requirements": 6.141015426533573,
+      "scalability": 5.687465561788617,
+      "practicality_score": 5.922889353743037
     }
   },
   "best_models": {
     "accuracy": {
       "model": "Quantum-Classical",
-      "value": 0.9350702964425746
+      "value": 0.9005041339989083
     },
     "training_time": {
-      "model": "Neural Network",
-      "value": 0.6249080364530282
+      "model": "Random Forest",
+      "value": 0.5885333038524684
     },
     "inference_time": {
-      "model": "Neural Network",
-      "value": 0.03403901787826637
+      "model": "Gradient Boosting",
+      "value": 0.044224304327059594
     },
     "memory_usage": {
-      "model": "Random Forest",
-      "value": 2.943981067620977
+      "model": "Gradient Boosting",
+      "value": 2.6205257384797704
     },
     "practicality_score": {
-      "model": "Neural Network",
-      "value": 7.902195349617937
+      "model": "Deep Learning",
+      "value": 8.598291631810723
     }
   },
   "insights": {
@@ -64,5 +67,5 @@
     "Quantum": "Quantum models show promise but currently have higher resource requirements and complexity.",
     "Hybrid": "Hybrid models often achieve the best accuracy by combining the strengths of both classical and quantum approaches."
   },
-  "timestamp": "2025-03-02 17:37:20"
+  "timestamp": "2025-03-02 17:51:24"
 }
