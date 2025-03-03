@@ -2,9 +2,9 @@
 
 A comprehensive research project comparing quantum, classical, and hybrid computing approaches for machine learning tasks, featuring Apple-inspired visualizations and detailed performance analytics.
 
-![Benchmark Dashboard](https://raw.githubusercontent.com/example/quantum-vs-classical-computing/main/images/dashboard_example.png)
 
-## 📊 Key Findings
+
+##  Key Findings
 
 Our benchmark analysis revealed important insights about different computing paradigms:
 
@@ -18,7 +18,7 @@ Our benchmark analysis revealed important insights about different computing par
 - **Future Potential**: Quantum and hybrid approaches show promising growth trajectories as hardware and frameworks mature
 - **Best Overall Balance**: Hybrid models currently offer the best tradeoff between performance and practicality
 
-## 🚀 Features
+## Features
 
 - **Multi-Paradigm Comparison**: Evaluate classical, quantum, and hybrid approaches on equal footing
 - **Comprehensive Metrics**: Analyze accuracy, speed, resource usage, and practical implementation factors
@@ -27,7 +27,7 @@ Our benchmark analysis revealed important insights about different computing par
 - **Kaggle Integration**: Seamlessly download and use datasets from Kaggle
 - **Modular Architecture**: Easily extend with new models, metrics, or visualization types
 
-## 🛠️ Setup and Installation
+## Setup and Installation
 
 1. **Clone this repository**
    ```bash
@@ -49,7 +49,7 @@ Our benchmark analysis revealed important insights about different computing par
    - Place in `~/.kaggle/` (Unix/MacOS) or `C:\Users\<Windows-username>\.kaggle\` (Windows)
    - Make the file readable only by you: `chmod 600 ~/.kaggle/kaggle.json`
 
-## 📋 Quick Start Guide
+## Quick Start Guide
 
 ### Run the Master Dashboard
 View the comprehensive visualization dashboard:
@@ -82,7 +82,7 @@ Organize files and clean up temporary data:
 python cleanup.py
 ```
 
-## 📊 Available Visualizations
+## Available Visualizations
 
 The project generates several key visualizations:
 
@@ -94,7 +94,7 @@ The project generates several key visualizations:
 
 All visualizations are saved in their respective results directories and accessible through HTML dashboards.
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 ├── data/                          # Datasets directory
@@ -119,7 +119,7 @@ All visualizations are saved in their respective results directories and accessi
 └── requirements.txt               # Project dependencies
 ```
 
-## 🧪 Testing Different Models
+## Testing Different Models
 
 ### Classical Models
 - **Random Forest**: Fast training, good interpretability
@@ -136,7 +136,7 @@ All visualizations are saved in their respective results directories and accessi
 - **Ensemble Hybrid**: Combine predictions from multiple models
 - **Quantum Enhanced**: Use quantum computing to enhance classical models
 
-## 🔍 Interpreting Results
+## Interpreting Results
 
 ### Dashboard Navigation
 The master dashboard organizes results into four sections:
@@ -152,7 +152,7 @@ The master dashboard organizes results into four sections:
 - **Memory Usage**: Lower is better (computational efficiency)
 - **Practicality Score**: Higher is better (ease of implementation)
 
-## 🚨 Troubleshooting
+## Troubleshooting
 
 ### Visualization Issues
 If visualizations don't display properly:
@@ -172,16 +172,16 @@ For Kaggle API problems:
 2. Check your internet connection
 3. Use local example datasets from `data/examples/`
 
-## 📖 Learn More
+## Learn More
 
 - **[WALKTHROUGH.md](WALKTHROUGH.md)**: Detailed step-by-step guide
 - **[results/README.md](results/README.md)**: Guide to interpreting benchmark outputs
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-## 📚 Citation
+## Citation
 
 If you use this code in your research, please cite:
 
