@@ -1,65 +1,65 @@
 {
   "averages": {
     "Classical": {
-      "accuracy": 0.8887441121996043,
-      "training_time": 1.1846194285033809,
-      "inference_time": 0.055426448306340886,
-      "memory_usage": 7.71626270743967,
-      "cpu_usage": 14.429101882793402,
-      "setup_difficulty": 8.560516553018587,
-      "interpretability": 8.067515552445741,
-      "deployment_complexity": 8.3900812406518,
-      "hardware_requirements": 8.530886740864243,
-      "scalability": 8.030760974415426,
-      "practicality_score": 8.31595221227916
+      "accuracy": 0.8836125860040946,
+      "training_time": 1.1385602367674845,
+      "inference_time": 0.06609856945032432,
+      "memory_usage": 6.891822222512449,
+      "cpu_usage": 14.648466724017947,
+      "setup_difficulty": 7.905181978280694,
+      "interpretability": 7.725717924406776,
+      "deployment_complexity": 7.600798798857121,
+      "hardware_requirements": 8.313234043063838,
+      "scalability": 7.977564630621492,
+      "practicality_score": 7.904499475045985
     },
     "Quantum": {
-      "accuracy": 0.823243457998162,
-      "training_time": 3.69509033218974,
-      "inference_time": 0.2172969575719994,
-      "memory_usage": 18.020465617959417,
-      "cpu_usage": 50.87130849454942,
-      "setup_difficulty": 4.512229615045286,
-      "interpretability": 4.36764081780607,
-      "deployment_complexity": 5.039486888206965,
-      "hardware_requirements": 4.7808330363183,
-      "scalability": 4.325538499950876,
-      "practicality_score": 4.6051457714655
+      "accuracy": 0.8139074417054315,
+      "training_time": 5.096068565277926,
+      "inference_time": 0.23136412053221894,
+      "memory_usage": 20.180159555328288,
+      "cpu_usage": 48.513950416076625,
+      "setup_difficulty": 4.080414180895211,
+      "interpretability": 4.083803181431929,
+      "deployment_complexity": 4.307560703656461,
+      "hardware_requirements": 4.34143722600364,
+      "scalability": 4.27305320056719,
+      "practicality_score": 4.217253698510886
     },
     "Hybrid": {
-      "accuracy": 0.8947889861551025,
-      "training_time": 3.0758687818474972,
-      "inference_time": 0.1060309532229968,
-      "memory_usage": 11.971204636635987,
-      "cpu_usage": 38.46060195599164,
-      "setup_difficulty": 6.124803495979348,
-      "interpretability": 5.251908717802631,
-      "deployment_complexity": 5.288128877588837,
-      "hardware_requirements": 6.209257727567659,
-      "scalability": 5.768478295987678,
-      "practicality_score": 5.72851542298523
+      "accuracy": 0.9082669222309077,
+      "training_time": 3.489544794017731,
+      "inference_time": 0.10287467394214769,
+      "memory_usage": 15.049666369653362,
+      "cpu_usage": 38.755188730249415,
+      "setup_difficulty": 6.429366343079902,
+      "interpretability": 6.266935360619349,
+      "deployment_complexity": 6.543050874158176,
+      "hardware_requirements": 6.634363400845471,
+      "scalability": 6.485335798705432,
+      "practicality_score": 6.471810355481665
     }
   },
   "best_models": {
     "accuracy": {
-      "model": "Quantum Enhanced",
-      "value": 0.9370254248360287
+      "model": "Ensemble Hybrid",
+      "value": 0.9381075698001066
     },
     "training_time": {
-      "model": "Deep Learning",
-      "value": 0.6364402268119922
+      "model": "Gradient Boosting",
+      "value": 0.8905550874920212
     },
     "inference_time": {
       "model": "Random Forest",
-      "value": 0.04140978392375323
+      "value": 0.058568304837587515
     },
     "memory_usage": {
       "model": "Random Forest",
-      "value": 6.028688301193401
+      "value": 3.7896417428034272
     },
     "practicality_score": {
-      "model": "Deep Learning",
-      "value": 8.552771675534121
+      "model": "Neural Network",
+      "value": 8.501185256656763
     }
   },
   "insights": {
@@ -67,5 +67,5 @@
     "Quantum": "Quantum models show promise but currently have higher resource requirements and complexity.",
     "Hybrid": "Hybrid models often achieve the best accuracy by combining the strengths of both classical and quantum approaches."
   },
-  "timestamp": "2025-03-02 17:56:06"
+  "timestamp": "2025-03-10 21:15:28"
 }

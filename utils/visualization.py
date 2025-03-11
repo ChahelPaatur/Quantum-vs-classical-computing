@@ -23,6 +23,8 @@ APPLE_COLORS = {
     'red': '#FF3B30',  # iOS red
     'teal': '#5AC8FA',  # iOS teal
     'yellow': '#FFCC00',  # iOS yellow
+    'gold': '#FFD700',   # Gold color for Hybrid models
+    'amber': '#FFBF00',  # Amber alternative
     'gray': '#8E8E93',  # iOS gray
     'light_gray': '#E5E5EA', # iOS light gray
     'white': '#FFFFFF',  # White
@@ -239,23 +241,53 @@ class AppleStyleVisualizer:
         """
         fig, (ax1, ax2) = plt.subplots(2, 1, figsize=figsize)
         
+        # Determine which metrics are available
+        sample_model = next(iter(results_dict.values()))
+        cpu_field = None
+        memory_field = None
+        
+        # Check for CPU metrics in order of preference
+        for field in ['avg_cpu', 'cpu_usage', 'max_cpu']:
+            if field in sample_model:
+                cpu_field = field
+                break
+                
+        # Check for memory metrics in order of preference
+        for field in ['avg_memory', 'memory_usage', 'max_memory']:
+            if field in sample_model:
+                memory_field = field
+                break
+        
+        if not cpu_field or not memory_field:
+            print(f"Warning: Missing required metrics for resource usage plot. Available metrics: {list(sample_model.keys())}")
+            return fig
+        
         # Extract model names, CPU and memory usage
         models = []
-        cpu_usage = []
-        memory_usage = []
+        model_types = []
+        cpu_usage_values = []
+        memory_usage_values = []
         
         for model_name, metrics in results_dict.items():
-            if 'avg_cpu' in metrics and 'memory_used' in metrics:
-                models.append(model_name)
-                cpu_usage.append(metrics['avg_cpu'])
-                memory_usage.append(metrics['memory_used'])
+            models.append(model_name)
+            model_types.append(metrics['model_type'])
+            cpu_usage_values.append(metrics[cpu_field])
+            memory_usage_values.append(metrics[memory_field])
         
-        # Create bar colors
-        colors = [APPLE_COLORS['blue'], APPLE_COLORS['indigo'], APPLE_COLORS['purple']]
+        # Create bar colors based on model type
+        colors = []
+        for model_type in model_types:
+            if model_type == 'Classical':
+                colors.append(APPLE_COLORS['blue'])
+            elif model_type == 'Quantum':
+                colors.append(APPLE_COLORS['green'])
+            else:  # Hybrid
+                colors.append(APPLE_COLORS['amber'])  # Using amber instead of gold
         
         # Plot CPU usage
-        bars1 = ax1.bar(models, cpu_usage, color=colors, width=0.6)
-        ax1.set_title('CPU Usage Comparison', fontsize=16, fontweight='bold', pad=15)
+        bars1 = ax1.bar(models, cpu_usage_values, color=colors, width=0.6)
+        ax1.set_title(f'CPU Usage Comparison ({cpu_field.replace("_", " ").title()})', 
+                     fontsize=16, fontweight='bold', pad=15)
         ax1.set_ylabel('CPU Usage (%)', fontsize=12)
         ax1.grid(axis='y', linestyle='--', alpha=0.7)
         
@@ -273,8 +305,9 @@ class AppleStyleVisualizer:
             )
         
         # Plot Memory usage
-        bars2 = ax2.bar(models, memory_usage, color=colors, width=0.6)
-        ax2.set_title('Memory Usage Comparison', fontsize=16, fontweight='bold', pad=15)
+        bars2 = ax2.bar(models, memory_usage_values, color=colors, width=0.6)
+        ax2.set_title(f'Memory Usage Comparison ({memory_field.replace("_", " ").title()})', 
+                     fontsize=16, fontweight='bold', pad=15)
         ax2.set_ylabel('Memory Used (MB)', fontsize=12)
         ax2.set_xlabel('Models', fontsize=12)
         ax2.grid(axis='y', linestyle='--', alpha=0.7)
@@ -334,57 +367,108 @@ class AppleStyleVisualizer:
         
         fig, ax = plt.subplots(figsize=figsize, subplot_kw=dict(polar=True))
         
+        # Define which metrics are better when higher (True) or lower (False)
+        better_when_higher = {
+            'accuracy': True,
+            'precision': True,
+            'recall': True,
+            'f1_score': True,
+            'roc_auc': True,
+            'r2': True,
+            'practicality_score': True,
+            'setup_difficulty': True,
+            'interpretability': True,
+            'deployment_complexity': True,
+            'hardware_requirements': True,
+            'scalability': True,
+            'training_time': False,
+            'inference_time': False,
+            'memory_usage': False,
+            'cpu_usage': False,
+            'max_memory': False,
+            'avg_memory': False,
+            'max_cpu': False,
+            'avg_cpu': False,
+        }
+        
         # Extract normalized values for each model
         normalized_values = {}
+        metrics_extended = metrics + [metrics[0]]
         
-        for metric in metrics:
-            max_value = max(results_dict[model][metric] for model in results_dict if metric in results_dict[model])
-            min_value = min(results_dict[model][metric] for model in results_dict if metric in results_dict[model])
+        # Group models by type
+        models_by_type = {}
+        for model, metrics_dict in results_dict.items():
+            model_type = metrics_dict['model_type']
+            if model_type not in models_by_type:
+                models_by_type[model_type] = []
+            models_by_type[model_type].append(model)
+        
+        # Calculate average values by model type
+        type_values = {}
+        for model_type, model_list in models_by_type.items():
+            type_values[model_type] = []
             
-            for model in results_dict:
-                if model not in normalized_values:
-                    normalized_values[model] = []
+            for metric in metrics:
+                # Get values for this metric from all models of this type
+                values = [results_dict[model][metric] for model in model_list]
+                # Calculate the average
+                avg_value = np.mean(values)
+                type_values[model_type].append(avg_value)
+        
+        # Normalize the values
+        for metric_idx, metric in enumerate(metrics):
+            max_value = max(tv[metric_idx] for tv in type_values.values())
+            min_value = min(tv[metric_idx] for tv in type_values.values())
+            
+            for model_type in type_values:
+                value = type_values[model_type][metric_idx]
                 
-                if metric in results_dict[model]:
-                    # Check if higher is better for this metric
-                    higher_is_better = metric in ['accuracy', 'precision', 'recall', 'f1', 'roc_auc', 'r2']
-                    
-                    if max_value == min_value:
-                        normalized = 0.5  # Default if all values are the same
-                    else:
-                        value = results_dict[model][metric]
-                        normalized = (value - min_value) / (max_value - min_value)
-                        
-                        if not higher_is_better:
-                            normalized = 1 - normalized
-                    
-                    normalized_values[model].append(normalized)
+                # Check if higher is better for this metric
+                higher_is_better = better_when_higher.get(metric, True)
+                
+                if max_value == min_value:
+                    normalized = 0.5  # Default if all values are the same
                 else:
-                    normalized_values[model].append(0)
+                    # Normalize to 0-1 range
+                    normalized = (value - min_value) / (max_value - min_value)
+                    
+                    # Invert if lower is better
+                    if not higher_is_better:
+                        normalized = 1 - normalized
+                
+                type_values[model_type][metric_idx] = normalized
         
-        # Complete the loop for each model
-        for model in normalized_values:
-            normalized_values[model] += normalized_values[model][:1]
+        # Complete the loop for each model type
+        for model_type in type_values:
+            type_values[model_type].append(type_values[model_type][0])
         
-        # Plot each model
-        colors = [APPLE_COLORS['blue'], APPLE_COLORS['purple'], APPLE_COLORS['pink']]
-        for i, (model, values) in enumerate(normalized_values.items()):
-            ax.plot(angles, values, linewidth=2, linestyle='solid', color=colors[i % len(colors)], label=model)
-            ax.fill(angles, values, color=colors[i % len(colors)], alpha=0.1)
+        # Plot each model type
+        color_map = {
+            'Classical': APPLE_COLORS['blue'],
+            'Quantum': APPLE_COLORS['green'],
+            'Hybrid': APPLE_COLORS['gold']
+        }
+        
+        for model_type, values in type_values.items():
+            color = color_map.get(model_type, APPLE_COLORS['purple'])
+            ax.plot(angles, values, linewidth=3, linestyle='solid', color=color, label=model_type)
+            ax.fill(angles, values, color=color, alpha=0.2)
         
         # Set the labels
         metric_labels = [metric.replace('_', ' ').title() for metric in metrics]
         ax.set_xticks(angles[:-1])
-        ax.set_xticklabels(metric_labels, fontsize=12)
+        ax.set_xticklabels(metric_labels, fontsize=12, fontweight='bold')
         
-        # Remove radial labels and grid lines
+        # Remove radial labels and add light grid
         ax.set_yticklabels([])
         ax.set_rticks([0.25, 0.5, 0.75, 1.0])
+        ax.grid(True, alpha=0.3)
         
         # Add legend
-        ax.legend(loc='upper right', bbox_to_anchor=(0.1, 0.1))
+        ax.legend(loc='upper right', bbox_to_anchor=(0.2, 0.1), frameon=True, fontsize=12, 
+                  edgecolor=APPLE_COLORS['light_gray'])
         
-        plt.title('Model Performance Comparison', fontsize=20, fontweight='bold', y=1.05)
+        plt.title('Multi-Dimensional Performance Comparison', fontsize=20, fontweight='bold', y=1.08)
         plt.tight_layout()
         
         if save_path:

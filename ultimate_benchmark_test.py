@@ -211,6 +211,16 @@ def run_ultimate_benchmark():
     print("🧪 Generating model results...")
     all_results = generate_mock_results()
     
+    # Calculate practicality score for each model
+    for model, metrics in all_results.items():
+        metrics['practicality_score'] = np.mean([
+            metrics['setup_difficulty'],
+            metrics['interpretability'],
+            metrics['deployment_complexity'],
+            metrics['hardware_requirements'],
+            metrics['scalability']
+        ])
+    
     # Save raw data
     results_df = pd.DataFrame([
         {**{'model': model}, **metrics}
@@ -250,7 +260,7 @@ def run_ultimate_benchmark():
         # 5. Radar comparison
         ("radar_comparison.png", "Multi-Dimensional View", lambda: visualizer.plot_radar_comparison(
             all_results, 
-            metrics=['accuracy', 'f1_score', 'scalability', 'interpretability', 'setup_difficulty'],
+            metrics=['accuracy', 'training_time', 'memory_usage', 'cpu_usage', 'practicality_score'],
             save_path=f"{OUTPUT_DIR}/radar_comparison.png"
         ))
     ]
