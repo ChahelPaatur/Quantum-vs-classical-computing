@@ -1,8 +1,6 @@
 # Quantum vs Classical Computing Benchmark
 
-A comprehensive research project comparing quantum, classical, and hybrid computing approaches for machine learning tasks, featuring Apple-inspired visualizations and detailed performance analytics.
-
-
+This research project is to show the comparision between quantum, classical and hybrid computations for machine learning and data anlaysis tasks with detailed performance analytics. A detailed analysis is on our research paper:
 
 ##  Key Findings
 
@@ -19,7 +17,6 @@ Our benchmark analysis revealed important insights about different computing par
 - **Best Overall Balance**: Hybrid models currently offer the best tradeoff between performance and practicality
 
 ## Features
-
 - **Multi-Paradigm Comparison**: Evaluate classical, quantum, and hybrid approaches on equal footing
 - **Comprehensive Metrics**: Analyze accuracy, speed, resource usage, and practical implementation factors
 - **Beautiful Visualizations**: Apple-inspired UI design for all charts and dashboards
@@ -31,8 +28,8 @@ Our benchmark analysis revealed important insights about different computing par
 
 1. **Clone this repository**
    ```bash
-   git clone https://github.com/yourusername/quantum-vs-classical-computing.git
-   cd quantum-vs-classical-computing
+   git clone https://github.com/ChahelPaatur/Quantum-vs-classical-computing.git
+   cd Quantum-vs-classical-computing
    ```
 
 2. **Install dependencies**
@@ -187,9 +184,9 @@ If you use this code in your research, please cite:
 
 ```
 @software{QuantumClassicalBenchmark,
-  author = {Quantum vs Classical Research Team},
+  author = {Harshith Chemudugunta, Chahel Paatur},
   title = {Quantum vs Classical Computing Benchmark},
-  year = {2023},
-  url = {https://github.com/example/quantum-vs-classical-computing},
+  year = {2025},
+  url = {https://github.com/ChahelPaatur/Quantum-vs-classical-computing/},
 }
 ```
